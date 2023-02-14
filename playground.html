@@ -6,5 +6,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Playground — Complete Intro to Vue 3</title>
   </head>
-  <body></body>
+  <body>
+    <h1> HELLO </h1>
+    <div id="app">
+      <h1> {{ displayTitle }}</h1>
+      <p> {{ count }}</p>
+        <button v-on:click="incrementCount">Increment count</button>
+        <div>
+          <label for="incrementAmount">Increment by: </label>
+          <input type="number" v-model="IncrementAmount"/>
+        </div>
+
+      <hr />
+      <p v-if="message.length %2 === 0">Even: {{message.toUpperCase()}} </p>
+      <p v-else >Odd: {{message}} </p>
+      <ul v-for="item in listOfItems">
+        <li>
+          {{item.name}}
+          <ul>
+              <li v-for="number in item.list">{{ number }}</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue /*Vue function createApp, alternative : Vue.createApp()*/
+
+      /* Create a variable called app and it'll go ahead and create setup 
+      * Passed an object inside createApp function that will allow us to
+      * configure things about our app. Inside this object we pass a data option
+      * wich is a function that returns an object
+      */
+      const app = createApp(
+        {
+          data() {
+            return {
+              message: 'Hello it works',
+              count: 10,
+              counterTitle: 'Counter Standard',
+              incrementAmout: 8,
+              listOfItems: 
+              [{
+                name: 1,
+                id: 1,
+                list: [1, 2, 3]
+              },
+              {
+                name: 2,
+                id: 2,
+                list: [1, 2, 3]
+              },
+              {
+                name: 3,
+                id: 3,
+                list: [1, 2, 3]
+              },
+              {
+                name: 4,
+                id: 4,
+                list: [1, 2, 3]
+              },
+              {
+                name: 5,
+                id: 5,
+                list: [1, 2, 3]
+              }]
+
+            }
+          },
+          computed: {
+            /*Vue will decide when to correctly run it 
+            * Vue figures when its dependecies have changed
+            */
+            displayTitle(){
+              if (this.count < 20){
+                return 'Counter Standard'
+              } else {
+                return 'Counter Standard - Very Long'
+              }
+            }
+          },
+          methods: {
+            // changeIncrementAmount(event){
+            //   console.log(event);
+            //   this.incrementAmout = event.target.value
+            // },
+            incrementCount(){
+              this.count += this.incrementAmout
+            }
+          },
+          /*with watch you're doing a computation that you're manually tracking
+          * alors que computed l'automatise;
+          * Computed is about managing data
+          * Watch is perfect for managing trigerring action
+          */
+          watch: {
+            /*watching count propretie*/
+            count(newValue) {
+              if( newValue > 20){
+                this.counterTitle += ' - very long'
+              }
+            }
+          }
+        }
+      )
+
+      /*Mount to tell Vue where to put the app. We mount it to the ID of app with CSS selector */
+      app.mount('#app') 
+    </script>
+  </body>
 </html>

@@ -4,7 +4,124 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title> One piece </title>
   </head>
-  <body></body>
+
+  <body>
+    <div id="app">
+      <p v-if="characters.length === 0">There are no characters</p>
+      <ul v-else>
+        <li v-for="(character, index) in characters" :key="character.name"> 
+          <p> {{character.name}} </p>
+          <button v-if="!character.favorite" v-on:click="addFavorite(character)"> Favorite </button>
+          <!-- <button v-else-if="character.favorite" v-on:click="removeFavoriteCharater(character, index)"> Unfavorite </button> -->
+        </li>
+      </ul>
+
+      
+      <h2 v-if="favoriteList.length > 0"> Favorite Characters </h2>
+      <p>
+        <ul>
+          <li v-for="favorite in favoriteList">
+            {{favorite.name}}
+          </li>
+        </ul>
+
+      </p>
+
+      <h2>New characters</h2>
+      <pre> {{ newCharacter }} </pre>
+      <label for="character-name">Name</label>
+      <input type="text" @keyup.enter="addCharacterToList()" v-model="newCharacter.name"/>
+     
+     <h2>Statistics</h2>
+     <ul> 
+      <li v-for="(stat, role) in roleStatistics">{{ role }}: {{ stat }} </li>
+     </ul>
+     <hr>
+      <p>En string : 
+        <span v-for="(character, index) in characters"> 
+          {{ character.name }}{{ index === characters.length -1 ? '' : ', ' }}
+        </span>
+      </p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue
+      const app = createApp({
+        data: () => ({
+          newCharacter: {
+            name: '',
+            favorite: false,
+            role: [],
+          },
+          characters: [
+            {
+              name: 'Luffy',
+              favorite: false,
+              role: ['pirate', 'capitaine']
+            },
+            {
+              name: 'Roronoa',
+              favorite: false,
+              role: ['pirate']
+            },
+            {
+              name: 'Chopper',
+              favorite: false,
+               role: ['pirate', 'docteur']
+            },
+            {
+              name: 'Sanji',
+              favorite: false,
+              role: ['pirate', 'cuisinier']
+            },
+          ],
+          favoriteList: []
+        }),
+        computed: {
+          roleStatistics() {
+            const roles = ['pirate', 'capitaine', 'docteur', 'cuisinier']
+            const statistics = {
+                pirate: 0,
+                capitaine: 0,
+                docteur: 0,
+                cuisinier: 0
+            }
+            this.characters.forEach(character => {
+              roles.forEach( role => {
+                if (character.role.indexOf(role) > -1) {
+                  statistics[role] +=1
+                }
+              })
+            })
+            return statistics
+          }
+        },
+        methods: {
+          addFavorite(character){
+            this.favoriteList.push(character)
+            character.favorite = true
+            console.log(this.favoriteList)
+          },
+
+          // removeFavoriteCharater(character, index){
+          //   character.favorite = false
+          //   this.favoriteList.splice(index, 1)
+          //   console.log(this.favoriteList)
+          // },
+
+          addCharacterToList(){
+            this.characters.push(this.newCharacter)
+            this.newCharacter = { name: ''}
+          }
+        }
+      })
+
+
+
+      app.mount('#app')
+    </script>
+  </body>
 </html>
